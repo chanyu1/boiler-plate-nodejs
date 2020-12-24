@@ -23,7 +23,7 @@ mongoose
   .catch((err) => console.log(err));
 
 app.get("/", (req, res) => {
-  res.send("Hello World! 안녕하세요~!");
+  res.send("Hello World! 안녕하세요~~!");
 });
 
 app.post("/register", (req, res) => {
@@ -34,6 +34,29 @@ app.post("/register", (req, res) => {
     if (err) return res.json({ success: false, err });
     return res.status(200).json({
       success: true,
+    });
+  });
+});
+
+app.post("/login", (req, res) => {
+  // 요청된 이메일이 DB에 있는지 찾는다.
+  User.findOne({ email: req.body.email }, (err, user) => {
+    // 요청된 이메일 유저가 없을 경우.
+    if (!user) {
+      return res.json({
+        loginSuccess: false,
+        message: "The user could not be found.",
+      });
+    }
+    // 요청된 이메일이 DB에 있다면, 비밀번호가 맞는지 확인.
+    user.comparePassword(req.body.password, (err, isMatch) => {
+      if (!isMatch)
+        return res.json({
+          loginSuccess: false,
+          message: "The password was incorrect.",
+        });
+      // 비밀번호까지 맞다면 토큰 생성.
+      user.generateToken((err, user) => {});
     });
   });
 });
