@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
+const jwt = require("jsonwebtoken");
 
 const userSchema = mongoose.Schema({
   name: {
@@ -46,7 +47,7 @@ userSchema.pre("save", function (next) {
         next();
       });
     });
-    // 비밀번호 외의 것이 변경될 때 실행.
+    // 비밀번호 외의 것이 변경될 때 그냥 실행.
   } else {
     next();
   }
@@ -56,7 +57,21 @@ userSchema.methods.comparePassword = function (plainPassword, callback) {
   // plainPassword(123456)와 암호화된 비밀번호를 비교.
   // 복호화가 불가하기 때문에, plainPassword를 암호화 후 비교.
   bcrypt.compare(plainPassword, this.password, function (err, isMatch) {
-    if (err) return callback(err), callback(null, isMatch);
+    if (err) return callback(err);
+    callback(null, isMatch);
+  });
+};
+
+userSchema.methods.generateToken = function (callback) {
+  const user = this;
+  // jsonwebtoken을 이용해서 token을 생성.
+  // user._id + "secretToken" = token을 만듦.
+  // 후에 "secretToken"으로 user._id를 찾을 수 있음.
+  const token = jwt.sign(user._id.toHexString(), "secretToken");
+  user.token = token;
+  user.save(function (err, user) {
+    if (err) return callback(err);
+    callback(null, user);
   });
 };
 
