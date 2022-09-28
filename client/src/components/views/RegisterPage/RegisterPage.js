@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { registerUser } from "../../../_actions/user_action";
 import { withRouter } from "react-router-dom";
+
+import { registerUser } from "../../../_actions/userAction";
 
 function RegisterPage(props) {
   const dispatch = useDispatch();
@@ -24,7 +25,9 @@ function RegisterPage(props) {
   };
   const onSubmitHandler = (event) => {
     event.preventDefault();
-    if (Password !== ConfirmPassword) return alert("비밀번호 불일치");
+    if (Password !== ConfirmPassword) {
+      return alert("Password mismatch");
+    }
     let body = {
       email: Email,
       name: Name,

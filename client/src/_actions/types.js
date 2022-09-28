@@ -1,3 +1,3 @@
-export const LOGIN_USER = "login_user";
-export const REGISTER_USER = "register_user";
-export const AUTH_USER = "auth_user";
+export const LOGIN_USER = "LOGIN_USER";
+export const REGISTER_USER = "REGISTER_USER";
+export const AUTH_USER = "AUTH_USER";
