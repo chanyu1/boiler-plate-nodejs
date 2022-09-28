@@ -22,7 +22,6 @@ function LoginPage(props) {
       password: Password,
     };
     dispatch(loginUser(body)).then((response) => {
-      console.log(response.payload)
       if (response.payload.success) {
         props.history.push("/");
       } else {
