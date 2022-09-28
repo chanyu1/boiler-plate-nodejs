@@ -1,3 +1,3 @@
-# boilerplate-react-nodejs
+# boilerplate-node-with-react
 
-Boilerplate React and Node.js
+Boilerplate Node with React
